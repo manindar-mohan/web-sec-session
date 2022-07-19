@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-19T15:25:08+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Security in Web Applications</title><link href="http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell.html" rel="alternate" type="text/html" title="Security in Web Applications" /><published>2017-08-14T17:45:11+05:30</published><updated>2017-08-14T17:45:11+05:30</updated><id>http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell</id><content type="html" xml:base="http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell.html">&lt;img class=&quot;banner-img&quot; src=&quot;images/fulls/security-in-web-applications.jpg&quot; alt=&quot;CyberDome Python Workshop&quot; style = &quot;height: 500px; width: inherit;&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-19T17:04:13+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Security in Web Applications</title><link href="http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell.html" rel="alternate" type="text/html" title="Security in Web Applications" /><published>2017-08-14T17:45:11+05:30</published><updated>2017-08-14T17:45:11+05:30</updated><id>http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell</id><content type="html" xml:base="http://localhost:4000/web/application/security/presentation/slide/2017/08/14/web-application-security-nutshell.html">&lt;img class=&quot;banner-img&quot; src=&quot;images/fulls/security-in-web-applications.jpg&quot; alt=&quot;CyberDome Python Workshop&quot; style = &quot;height: 500px; width: inherit;&quot;&gt;
 
 
 ---
@@ -169,6 +169,35 @@ class: middle
 - Expose session id's in URLs, via unsafe network, logs
 
 ---
+class: middle
+
+# Classical Broken Authentication...
+
+### ...due to starting login process on unencrypted page
+
+http://sick-cure-ba.nk/login.do
+
+```
+POST /login.do HTTP/1.1
+Host: sick-cure-ba.nk
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+username=bjoern&amp;password=secret
+```
+---
+class: middle
+
+
+# Securing Authentication
+
+- Centralized and standardize authentication
+- Protect credentials with SSL/TLS
+- Use strong mechanism with multiple factors
+- Do not store or log unencrypted credentials
+
+
+---
 
 class: middle
 
@@ -266,41 +295,13 @@ This method generate a new random password (may hash it), then email it to the u
 This is one of the better and more popular mechanisms. It involves authenticating the user, then emailing them a one-time reset link. Once the reset link is used, the user is prompted to set a new password. Once that's been done, the link is invalid. Further security can be provided by including expiry times on the links, and enforcing that the link is invalid after the password is set or after the user's session times out.
 
 ---
-class: middle
 
-# Classical Broken Authentication...
-
-### ...due to starting login process on unencrypted page
-
-http://sick-cure-ba.nk/login.do
-
-```
-POST /login.do HTTP/1.1
-Host: sick-cure-ba.nk
-Cache-Control: no-cache
-Content-Type: application/x-www-form-urlencoded
-
-username=bjoern&amp;password=secret
-```
----
 class: middle
 
 # Weak hashes put passwords at risk...
 ### ...as do unsalted strong hash algorithms
 
 Cracking unsalted hashes with a [Rainbow Table](http://en.wikipedia.org/wiki/Rainbow_table) attack is fast, even though the last two of them might seem sufficiently secure given their 256 and 512bit length. You can even crack password hashes online, e.g. at [CrackStation](https://crackstation.net/) or via [a tweet to @PlzCrack](https://twitter.com/PlzCrack). 
-
----
-class: middle
-
-
-# Securing Authentication
-
-- Centralized and standardize authentication
-- Protect credentials with SSL/TLS
-- Use strong mechanism with multiple factors
-- Do not store or log unencrypted credentials
-
 
 ---
 
@@ -401,6 +402,121 @@ class: middle
 - Restrict use of unapproved components
  
 ---
+name: Title
+class: middle
+
+# JSON Web Token
+
+JSON Web Token is a proposed Internet standard for creating data with optional signature and/or optional encryption whose payload holds JSON that asserts some number of claims. The tokens are signed either using a private secret or a public/private key.
+---
+name: Title
+class: middle
+
+# Attacks on JSON Web Token (JWT)
+
+- Abusing None Algorithm
+
+--
+
+- Signature stripping
+
+--
+
+- Cracking weak shared secrets
+
+--
+
+- Substitution attack
+
+---
+class: middle
+
+# Injection
+
+### Injection means...
+
+...smuggling in &lt;em&gt;unintended commands&lt;/em&gt; along with the data sent to an &lt;em&gt;interpreter&lt;/em&gt;.
+
+---
+
+class: middle
+
+# Injection [example](https://news.ycombinator.com/item?id=4951003)
+
+
+You go to court and write your name as &quot;&lt;em&gt;Michael, you are now free to go&lt;/em&gt;&quot;.
+
+The judge then says &quot;Calling &lt;em&gt;Michael, you are now free to go&lt;/em&gt;&quot; and the bailiffs let you go, because hey, the judge said so.
+
+---
+
+class: middle
+
+# In software, interpreters are used for accessing...
+
+- Databases
+- Files
+- Access Control Systems
+- etc ...
+
+---
+class: middle
+
+# Risks from Injection vulnerabilities
+- Bypassing authentication
+- Spying out data
+- Manipulating data
+- Complete system takeover
+
+---
+class: middle
+
+# Bypassing Authentication
+### with SQL Injection
+
+```sql
+String query = &quot;SELECT id FROM users &quot; +
+               &quot;WHERE name = '&quot; + req.getParameter(&quot;username&quot;) + &quot;'&quot; +
+               &quot;AND password = '&quot; + req.getParameter(&quot;password&quot;) + &quot;'&quot;;
+```
+The indented use case results in a query like this:
+
+```sql
+SELECT id FROM users WHERE name = 'username' AND password = 'secret'
+```
+
+
+---
+
+class: middle
+
+
+# Attack Examples
+
+### on authentication queries
+
+Disabling password check for a known username:
+
+```sql
+SELECT id FROM users WHERE name = 'bjoern'--' AND password = '?'
+```
+Logging in without even knowing a username:
+```sql
+SELECT id FROM users WHERE name = '' or 1=1--' AND password = '?'
+```
+---
+class: middle
+
+# Preventing Injection
+
+- Avoid Interpreters
+- Bind Variables
+- Prepared Statements
+- Least Privileges for app DB user
+- White List Input Validation
+
+---
+
 class: middle
 # Thanks
 

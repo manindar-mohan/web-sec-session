@@ -283,6 +283,35 @@ class: middle
 - Expose session id's in URLs, via unsafe network, logs
 
 ---
+class: middle
+
+# Classical Broken Authentication...
+
+### ...due to starting login process on unencrypted page
+
+http://sick-cure-ba.nk/login.do
+
+```
+POST /login.do HTTP/1.1
+Host: sick-cure-ba.nk
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+
+username=bjoern&password=secret
+```
+---
+class: middle
+
+
+# Securing Authentication
+
+- Centralized and standardize authentication
+- Protect credentials with SSL/TLS
+- Use strong mechanism with multiple factors
+- Do not store or log unencrypted credentials
+
+
+---
 
 class: middle
 
@@ -380,41 +409,13 @@ This method generate a new random password (may hash it), then email it to the u
 This is one of the better and more popular mechanisms. It involves authenticating the user, then emailing them a one-time reset link. Once the reset link is used, the user is prompted to set a new password. Once that's been done, the link is invalid. Further security can be provided by including expiry times on the links, and enforcing that the link is invalid after the password is set or after the user's session times out.
 
 ---
-class: middle
 
-# Classical Broken Authentication...
-
-### ...due to starting login process on unencrypted page
-
-http://sick-cure-ba.nk/login.do
-
-```
-POST /login.do HTTP/1.1
-Host: sick-cure-ba.nk
-Cache-Control: no-cache
-Content-Type: application/x-www-form-urlencoded
-
-username=bjoern&password=secret
-```
----
 class: middle
 
 # Weak hashes put passwords at risk...
 ### ...as do unsalted strong hash algorithms
 
 Cracking unsalted hashes with a [Rainbow Table](http://en.wikipedia.org/wiki/Rainbow_table) attack is fast, even though the last two of them might seem sufficiently secure given their 256 and 512bit length. You can even crack password hashes online, e.g. at [CrackStation](https://crackstation.net/) or via [a tweet to @PlzCrack](https://twitter.com/PlzCrack). 
-
----
-class: middle
-
-
-# Securing Authentication
-
-- Centralized and standardize authentication
-- Protect credentials with SSL/TLS
-- Use strong mechanism with multiple factors
-- Do not store or log unencrypted credentials
-
 
 ---
 
@@ -515,6 +516,121 @@ class: middle
 - Restrict use of unapproved components
  
 ---
+name: Title
+class: middle
+
+# JSON Web Token
+
+JSON Web Token is a proposed Internet standard for creating data with optional signature and/or optional encryption whose payload holds JSON that asserts some number of claims. The tokens are signed either using a private secret or a public/private key.
+---
+name: Title
+class: middle
+
+# Attacks on JSON Web Token (JWT)
+
+- Abusing None Algorithm
+
+--
+
+- Signature stripping
+
+--
+
+- Cracking weak shared secrets
+
+--
+
+- Substitution attack
+
+---
+class: middle
+
+# Injection
+
+### Injection means...
+
+...smuggling in <em>unintended commands</em> along with the data sent to an <em>interpreter</em>.
+
+---
+
+class: middle
+
+# Injection [example](https://news.ycombinator.com/item?id=4951003)
+
+
+You go to court and write your name as "<em>Michael, you are now free to go</em>".
+
+The judge then says "Calling <em>Michael, you are now free to go</em>" and the bailiffs let you go, because hey, the judge said so.
+
+---
+
+class: middle
+
+# In software, interpreters are used for accessing...
+
+- Databases
+- Files
+- Access Control Systems
+- etc ...
+
+---
+class: middle
+
+# Risks from Injection vulnerabilities
+- Bypassing authentication
+- Spying out data
+- Manipulating data
+- Complete system takeover
+
+---
+class: middle
+
+# Bypassing Authentication
+### with SQL Injection
+
+```sql
+String query = "SELECT id FROM users " +
+               "WHERE name = '" + req.getParameter("username") + "'" +
+               "AND password = '" + req.getParameter("password") + "'";
+```
+The indented use case results in a query like this:
+
+```sql
+SELECT id FROM users WHERE name = 'username' AND password = 'secret'
+```
+
+
+---
+
+class: middle
+
+
+# Attack Examples
+
+### on authentication queries
+
+Disabling password check for a known username:
+
+```sql
+SELECT id FROM users WHERE name = 'bjoern'--' AND password = '?'
+```
+Logging in without even knowing a username:
+```sql
+SELECT id FROM users WHERE name = '' or 1=1--' AND password = '?'
+```
+---
+class: middle
+
+# Preventing Injection
+
+- Avoid Interpreters
+- Bind Variables
+- Prepared Statements
+- Least Privileges for app DB user
+- White List Input Validation
+
+---
+
 class: middle
 # Thanks
 
